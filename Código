@@ -1,0 +1,171 @@
+'''
+Objetivo: desenvolver um programa na linguagem Python que simule o funcionamento similar ao realizado pelos sistemas 
+operacionais para gerenciar dinamicamente os espaços de memória do computador.
+
+1)  Ler o tópico 10.2 Gerenciamento de Memória do livro: LEWIS, John; DALE, Nell Ciência da Computação: 
+L.T.C., 2010, que esta digitalizado juntamente com o trabalho.
+
+2)  Desenvolver um programa na linguagem Python que implemente os algoritmos de gerenciamento de memória: 
+
+Primeira Escolha - O programa é alocado na primeira partição grande o suficiente para acomodá-lo.
+Melhor Escolha - O programa é alocado na menor partição com tamanho suficiente para acomodá-lo.
+Pior Escolha - O programa é alocado na maior partição com tamanho suficiente para acomodá-lo.
+
+Dentro de um espaço de memória com 100 posições.
+'''
+
+import random #importa a biblioteca random dentro do Python
+import time   #importa a biblioteca time dentro do Python
+
+memoria = [' '] * 100   #Lista com um espaço de 100 posições
+opcao = 0               #Variável recebendo valor 0
+tamanho = 0             #Variável recebendo valor 0
+letra = ''              #Variável recebendo valor vazio
+tam = len(memoria) + 39 #Variável recebendo valor do tamanho da lista(memória) + 39
+
+for i in range(100):
+    if(random.randint(0,11) >= 5):  # Randint vai sortear um número inteiro aleatório entre
+        memoria[i] = 'x'            # 0 e 10, se for maior ou igual a 5, coloca valor 'x', na posição 
+    else:                           # determinada da lista. Senão coloca valor vazio('').
+        memoria[i] = ' '
+print()
+
+print('=' * 120)
+for i in range(0, 20):
+    print(f'{memoria[i]:^3}', end = ' | ')
+print()                                         #Mostra a lista(memória) na tela para o usuário
+for i in range(20, 40):
+    print(f'{memoria[i]:^3}', end = ' | ')
+print()                                         #Mostra a lista(memória) na tela para o usuário     
+for i in range(60, 80): 
+    print(f'{memoria[i]:^3}', end = ' | ')
+print()                                         #Mostra a lista(memória) na tela para o usuário
+for i in range(80, 100):
+    print(f'{memoria[i]:^3}', end = ' | ')
+print()                                         #Mostra a lista(memória) na tela para o usuário
+for i in range(40, 60):
+    print(f'{memoria[i]:^3}', end = ' | ')
+print()                                         #Mostra a lista(memória) na tela para o usuário
+print('=' * 120)
+
+
+
+
+while opcao != 4:
+    print('-' * 30)
+    print('        MENU PROGRAMA   ')
+    print('-' * 30)                     
+    print("1 - Primeira Escolha")       #Usuário vai poder escolher entre 4 opções.
+    print("2 - Melhor Escolha")
+    print("3 - Pior Escolha")
+    print("4 - Sair")
+    print("Escolha o algoritmo pelo número:")
+    opcao = int(input())
+    print("Digite o tamanho da informação:")
+    tamanho = int(input())
+    print("Digite a letra a ser utilizada:")
+    letra = input()
+    print()
+
+    if opcao == 1:      #Se o usuário escolher a opção 1, vai receber a primeira escolha.
+        inicio = 0      #Variável recebendo valor 0
+        aux = True      #Variável recebendo valor verdadeiro
+        while aux == True and inicio < 100: #Enquanto o aux == True e o inicio for menor que 100, o programa continua
+            if memoria[inicio] == ' ':      # rodando na opção 1.
+                fim = inicio + 1            #Enquanto memoria na posição do inicio for menor que 100, fim recebe inico mais 1.
+                while fim < 100:            #Enquanto fim for menor que 100 e memoria na posição do fim for diferente de ' ',
+                    if memoria[fim] != ' ': # tamanho do buraco recebe fim menos inicio.
+                        tamanhoburaco = fim - inicio
+                        if tamanhoburaco >= tamanho:    #Se o tamanho do buraco for maior ou igual ao tamanho, fazer um laço
+                            for i in range(inicio, inicio+tamanho):  #da posição do inicio até a posição do inicio mais tamanho
+                                memoria[i] = letra                  #memoria na posição do laço(i) recebe letra
+                        else:
+                            print('\033[0;30;41mNão achei o tamanho que deseja, digite um tamanho válido.\033[m')
+                            #Senão, mostrar a mensagem acima em vermelho.
+                        aux = False  #aux recebe False e assim o programa na opção 1 encerra e volta para o menu principal
+                        inicio = fim #inicio recebe a posição do fim
+                        break #Interrompe o laço do fim
+                    fim += 1 #Fim recebe 1 até fim ser 100.
+            inicio += 1      #Início rece 1 até início ser 100.
+
+    if opcao == 2:      #Se o usuário escolher a opção 2, vai receber a melhor escolha.
+        cont = 0        #Variável recebendo valor 0
+        menor = 100     #Variável recebendo valor 100
+        iniciomenor = 0 #Variável recebendo valor 0
+        while cont < 100:
+            if memoria[cont] != ' ':  #Enquanto o cont for menor que 100 e memoria na posição do cont for diferente de ' ',
+                cont += 1             # o cont vai receber 1, senão, fim vai receber cont mais 1.
+            else:
+                fim = cont + 1
+                while fim < 100:            #Enquanto fim for menor que 100 e memória na posição fim for diferente de ' ',
+                    if memoria[fim] != ' ': #tamanho do buraco recebe fim menos cont.
+                        tamanhoburaco = fim - cont
+                        if tamanho <= tamanhoburaco:    #Se o tamanho for menor ou igual ao tamanho do buraco e o tamanho do buraco 
+                            if tamanhoburaco < menor:   #for menor que o menor, o menor passa a receber o tamanho do buraco e o inicio menor
+                                menor = tamanhoburaco   #recebe cont
+                                iniciomenor = cont
+                        cont = fim  #cont recebe a posição do fim
+                        break #Interrompe o laço do fim
+                    fim += 1  #Fim recebe 1 até fim ser 100.
+                cont += 1     #Cont rece 1 até início ser 100.
+
+        if tamanho <= menor:   #Fora do laço while, para não comparar as 100 vezes, se o tamanho for menor ou igual ao 
+            for i in range(iniciomenor, iniciomenor+tamanho):  #menor, fazer um laço da posição do iniciomenor até a posição
+                if memoria[i] == ' ':                          #do iníciomenor mais o tamanho.
+                    memoria[i] = letra                         #Se memoria na posição do laço(i), for igual a vazio(' ')
+            else:                                              #memoria na posição do laço(i) recebe letra
+                print('\033[0;30;41mNão achei o espaço suficiente, digite um valor válido.\033[m') 
+                        #Senão, mostrar a mensagem acima em vermelho
+                break   #e interrompe o laço for.
+
+    if opcao == 3:        #Se o usuário escolher a opção 3, vai receber a pior escolha.
+        cont = 0          #Variável recebendo valor 0
+        maior = 0         #Variável recebendo valor 0
+        c = 0             #Variável recebendo valor 0
+        iniciomaior = 0   #Variável recebendo valor 0
+        while cont < 100:               #Enquanto o cont for menor que 100 e a memoria na posição do cont for igual a vazio (' ')
+            if memoria[cont] == ' ':    #fim recebe cont mais 1. E enquanto o fim for menor que 100 e a memoria na posição
+                fim = cont + 1          #fim for igual a vazio(' '), o fim recebe 1.
+                while fim < 100 and memoria[fim] == ' ':
+                    fim += 1
+                for i, v in enumerate(memoria):   #Laço para achar a maior partição da memória, i = pos e v = valor da lista
+                    if v == ' ':                  #Se o v for igual a vazio, c conta mais 1, e se o c for maior que o maior,
+                        c += 1                    #maior recebe c e o iniciomaior recebe a posição i menos o c + 1.
+                        if c > maior:
+                            maior = c
+                            iniciomaior = i - c + 1
+                    else:      #Se o v for diferente de vazio(' '), c rebe valor 0.
+                        c = 0
+            cont += 1 #Cont rece 1 até início ser 100.
+        if maior >= tamanho:  #Fora do laço while, para não comparar todas as vezes executadas, se o maior for maior ou igual
+            for i in range(iniciomaior, iniciomaior+tamanho):  #ao tamanho, fazer um laço da posição iniciomaior até iniciomaior
+                if memoria[i] == ' ':                          #mais o tamanho. E se a 
+                    memoria[i] = letra                         #Se memoria na posição do laço(i), for igual a vazio(' ')                                     
+        else:                                                  #memoria na posição do laço(i) recebe letra
+            print('\033[0;30;41mNão achei o espaço necessário, digite um valor válido.\033[m') 
+                    #Senão, mostrar a mensagem acima em vermelho
+
+    if opcao == 4: #Se o usuário escolher a opção 4, vai interromper o programa principal.;
+        break #Interrompe o laço while principal do programa.
+
+    print()
+    print('=' * 120)
+    for i in range(0, 20):
+        print(f'{memoria[i]:^3}', end = ' | ')
+    print()                                     #Mostra a lista(memória) na tela para o usuário com as alterações feitas
+    for i in range(20, 40):                     
+        print(f'{memoria[i]:^3}', end = ' | ')
+    print()                                     #Mostra a lista(memória) na tela para o usuário com as alterações feitas
+    for i in range(60, 80):
+        print(f'{memoria[i]:^3}', end = ' | ')
+    print()                                     #Mostra a lista(memória) na tela para o usuário com as alterações feitas
+    for i in range(80, 100):
+        print(f'{memoria[i]:^3}', end = ' | ')
+    print()                                     #Mostra a lista(memória) na tela para o usuário com as alterações feitas
+    for i in range(40, 60):
+        print(f'{memoria[i]:^3}', end = ' | ')  
+    print()                                     #Mostra a lista(memória) na tela para o usuário com as alterações feitas
+    print('=' * 120)
+
+time.sleep(1.5)  #Vai demorar 1.5 segundos para mostrar a mensagem final
+print('\033[0;30;44mFIM DO PROGRAMA. VOLTE SEMPRE\033[m')  #mostra a mensagem final em azul.
